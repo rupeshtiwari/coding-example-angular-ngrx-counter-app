@@ -21,15 +21,15 @@ export interface State extends fromRoot.State {
   [countersFeatureKey]: CounterState;
 }
 
-const _counterReducer = createReducer(
+const counterReducer = createReducer(
   initialState,
   on(increment, state => ({ ...state, count: state.count + 1 })),
-  on(decrement, state => ({ ...state, count: state.count + 1 })),
+  on(decrement, state => ({ ...state, count: state.count - 1 })),
   on(reset, state => initialState)
 );
 
 export function reducers(state: CounterState, action: Action) {
-  return _counterReducer(state, action);
+  return counterReducer(state, action);
 }
 
 export const selectCounterState = createFeatureSelector<CounterState>(
