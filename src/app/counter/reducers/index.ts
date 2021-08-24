@@ -1,16 +1,14 @@
-import * as fromRoot from "../../reducers";
-
-import { increment, decrement, reset } from "../actions";
 import {
-  createReducer,
-  on,
   Action,
   createFeatureSelector,
+  createReducer,
   createSelector,
-} from "@ngrx/store";
-import { Action } from "rxjs/internal/scheduler/Action";
+  on,
+} from '@ngrx/store';
+import * as fromRoot from '../../reducers';
+import { decrement, increment, reset } from '../actions';
 
-export const countersFeatureKey = "counters";
+export const countersFeatureKey = 'counters';
 
 export const initialState: CounterState = { count: 0 };
 
@@ -50,7 +48,7 @@ const counterReducer = createReducer(
 );
 
 function logReducerChange(state: any, isBefore = true) {
-  console.log(isBefore ? "---BEFORE---\n" : "---AFTER---\n", state);
+  console.log(isBefore ? '---BEFORE---\n' : '---AFTER---\n', state);
 }
 
 export function reducers(state: CounterState, action: Action) {
