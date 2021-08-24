@@ -6,8 +6,9 @@ import {
   on,
   Action,
   createFeatureSelector,
-  createSelector
+  createSelector,
 } from "@ngrx/store";
+import { Action } from "rxjs/internal/scheduler/Action";
 
 export const countersFeatureKey = "counters";
 
@@ -23,17 +24,43 @@ export interface State extends fromRoot.State {
 
 const counterReducer = createReducer(
   initialState,
-  on(increment, state => ({ ...state, count: state.count + 1 })),
-  on(decrement, state => ({ ...state, count: state.count - 1 })),
-  on(reset, state => initialState)
+  on(increment, (state) => {
+    console.log(`Received: ${increment.type} Action`);
+    logReducerChange(state);
+    const newState = { ...state, count: state.count + 1 };
+    logReducerChange(newState, false);
+
+    return newState;
+  }),
+  on(decrement, (state) => {
+    console.log(`Received: ${decrement.type} Action`);
+    logReducerChange(state);
+    const newState = { ...state, count: state.count - 1 };
+    logReducerChange(newState, false);
+
+    return newState;
+  }),
+  on(reset, (state) => {
+    console.log(`Received: ${reset.type} Action`);
+    logReducerChange(state);
+    logReducerChange(initialState, false);
+
+    return initialState;
+  })
 );
+
+function logReducerChange(state: any, isBefore = true) {
+  console.log(isBefore ? "---BEFORE---\n" : "---AFTER---\n", state);
+}
 
 export function reducers(state: CounterState, action: Action) {
   return counterReducer(state, action);
 }
 
-export const selectCounterState = createFeatureSelector<CounterState>(
-  countersFeatureKey
-);
+export const selectCounterState =
+  createFeatureSelector<CounterState>(countersFeatureKey);
 
-export const getCount = createSelector(selectCounterState, state => state.count);
+export const getCount = createSelector(
+  selectCounterState,
+  (state) => state.count
+);
